@@ -1,0 +1,11 @@
+{
+  "id": "1",
+  "slug": "welcome-to-my-blog",
+  "title": "Welcome to My Blog",
+  "quote": "Every great story begins with a single word.",
+  "coverImage": null,
+  "content": "<p>Hello, and welcome. This is my corner of the internet — a place where I write about things that matter to me, ideas that have been living in my head a little too long, and observations about the world that deserve more than a passing thought.</p><p>I started this blog because I believe in the power of writing. Not just as a tool for communication, but as a way to think more clearly, feel more deeply, and connect more meaningfully with others who might be wondering about the same things.</p><h2>What you can expect here</h2><p>No algorithm-optimized content. No hot takes written for engagement. Just honest thoughts, written at their own pace — on business, on life, on people, on whatever catches my attention and refuses to let go.</p><p>Some posts will be long. Some will be short. All of them will be real.</p><h2>A note on consistency</h2><p>I won't promise a posting schedule, because I think forced frequency kills good writing. What I will promise is that when something is worth saying, I'll say it here — and I'll say it as well as I can.</p><p>Thanks for being here. I hope something you read on this blog makes you think twice, or smile, or see something familiar in a new way.</p>",
+  "createdAt": "2026-05-12T00:00:00Z",
+  "published": true,
+  "readTime": 2
+}
