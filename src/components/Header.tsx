@@ -6,10 +6,10 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
         <Link href="/" className="group flex flex-col leading-tight">
           <span className="font-display text-2xl font-bold tracking-tight text-ink group-hover:opacity-75 transition-opacity">
-            Altaf
+            Present Enough
           </span>
           <span className="text-[10px] tracking-[0.2em] text-muted uppercase font-body">
-            thoughts &amp; essays
+            by Altaf Simavatwala
           </span>
         </Link>
         <nav className="flex items-center gap-8">

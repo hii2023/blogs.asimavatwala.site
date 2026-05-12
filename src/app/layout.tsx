@@ -15,11 +15,11 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Altaf Simavatwala — Thoughts & Essays',
-  description: 'Personal blog by Altaf Simavatwala. Ideas, observations, and essays on life, business, and everything in between.',
+  title: 'Present Enough — Altaf Simavatwala',
+  description: 'Observations, questions, and uncomfortable truths about responsibility, freedom, systems, inequality, awareness, business, and health.',
   openGraph: {
-    title: 'Altaf Simavatwala — Thoughts & Essays',
-    description: 'Personal blog by Altaf Simavatwala.',
+    title: 'Present Enough — Altaf Simavatwala',
+    description: 'Observations, questions, and uncomfortable truths about responsibility, freedom, systems, inequality, awareness, business, and health.',
     siteName: 'blogs.asimavatwala.site',
   },
 };
