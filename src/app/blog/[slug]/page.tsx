@@ -1,6 +1,9 @@
 import { notFound } from 'next/navigation';
 import { getAllPosts, getPostBySlug } from '@/lib/posts';
 import Header from '@/components/Header';
+import ShareBar from '@/components/ShareBar';
+import LikeButton from '@/components/LikeButton';
+import Comments from '@/components/Comments';
 
 export async function generateStaticParams() {
   return getAllPosts().map((p) => ({ slug: p.slug }));
@@ -10,7 +13,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const post = getPostBySlug(params.slug);
   if (!post) return {};
   return {
-    title: `${post.title} — Altaf Simavatwala`,
+    title: `${post.title} — Present Enough`,
     description: post.quote ?? post.content.replace(/<[^>]*>/g, '').slice(0, 160),
   };
 }
@@ -54,7 +57,6 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             </blockquote>
           )}
 
-          {/* Accent dots */}
           <div className="flex items-center gap-2 mb-10">
             <span className="w-10 h-[3px] bg-accent-coral rounded-full" />
             <span className="w-6 h-[3px] bg-accent-gold rounded-full" />
@@ -74,18 +76,39 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         )}
 
         {/* Body */}
-        <div className="max-w-2xl mx-auto px-6 pb-24">
+        <div className="max-w-2xl mx-auto px-6 pb-12">
           <div
             className="blog-content text-ink"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
+        </div>
+
+        {/* ── Like + Share ── */}
+        <div className="max-w-2xl mx-auto px-6 pb-12">
+          <div className="border-t border-border pt-10 space-y-8">
+            {/* Like */}
+            <div>
+              <p className="text-[10px] tracking-[0.2em] text-muted uppercase mb-3 font-semibold">Did you enjoy this?</p>
+              <LikeButton slug={post.slug} />
+            </div>
+
+            {/* Share */}
+            <ShareBar title={post.title} slug={post.slug} />
+          </div>
+        </div>
+
+        {/* ── Comments ── */}
+        <div className="max-w-2xl mx-auto px-6 pb-24">
+          <div className="border-t border-border pt-10">
+            <Comments slug={post.slug} />
+          </div>
         </div>
       </main>
 
       <footer className="border-t border-border">
         <div className="max-w-6xl mx-auto px-6 py-7 flex items-center justify-between">
           <span className="font-display text-sm text-muted">
-            &copy; {new Date().getFullYear()} Altaf Simavatwala
+            &copy; {new Date().getFullYear()} Present Enough · Altaf Simavatwala
           </span>
           <a href="/" className="text-xs text-muted hover:text-ink transition-colors">
             ← Back to all posts
