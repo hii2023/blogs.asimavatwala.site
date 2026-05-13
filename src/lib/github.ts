@@ -93,3 +93,33 @@ export async function listRemotePosts(token: string): Promise<{ name: string; sh
     return [];
   }
 }
+
+export async function deletePost(token: string, slug: string, sha: string): Promise<void> {
+  await ghFetch(token, `posts/${slug}.json`, {
+    method: 'DELETE',
+    body: JSON.stringify({
+      message: `Delete post: ${slug}`,
+      sha,
+      branch: BRANCH,
+    }),
+  });
+}
+
+export async function deleteImage(token: string, imagePath: string): Promise<void> {
+  // imagePath is like /images/posts/filename.jpg
+  // repo path is public/images/posts/filename.jpg
+  const repoPath = `public${imagePath}`;
+  try {
+    const file = await ghFetch(token, repoPath) as { sha: string };
+    await ghFetch(token, repoPath, {
+      method: 'DELETE',
+      body: JSON.stringify({
+        message: `Delete image: ${imagePath}`,
+        sha: file.sha,
+        branch: BRANCH,
+      }),
+    });
+  } catch {
+    // Image may already be gone — ignore
+  }
+}

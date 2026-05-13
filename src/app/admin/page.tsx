@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
-import { createPost, updatePost, uploadImage } from '@/lib/github';
+import { createPost, updatePost, uploadImage, deletePost, deleteImage } from '@/lib/github';
 
 const Editor = dynamic(() => import('@/components/Editor'), { ssr: false });
 
@@ -53,6 +53,8 @@ export default function AdminPage() {
   const [error, setError]         = useState('');
   const [saving, setSaving]       = useState(false);
   const [done, setDone]           = useState('');
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null); // slug to confirm
+  const [deleting, setDeleting]   = useState(false);
 
   /* ── bootstrap ── */
   useEffect(() => {
@@ -200,6 +202,37 @@ export default function AdminPage() {
     setView('new');
   }
 
+  async function handleDelete(slug: string) {
+    const meta = posts.find(p => p.slug === slug);
+    if (!meta) return;
+    setDeleting(true);
+    setError('');
+    try {
+      await deletePost(token, slug, meta.sha);
+      setConfirmDelete(null);
+      setDone('Post deleted. Site rebuilds in ~2 minutes.');
+      await loadPosts(token);
+      setTimeout(() => setDone(''), 5000);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to delete post.');
+    } finally {
+      setDeleting(false);
+    }
+  }
+
+  async function removeImage() {
+    if (!form.coverImage) {
+      // Just clear the local preview/file
+      setForm(f => ({ ...f, coverImage: '', coverImageFile: null }));
+      setImagePreview(null);
+      return;
+    }
+    // Optionally delete from GitHub too
+    try { await deleteImage(token, form.coverImage); } catch { /* ignore */ }
+    setForm(f => ({ ...f, coverImage: '', coverImageFile: null }));
+    setImagePreview(null);
+  }
+
   if (!mounted) return null;
 
   /* ══════════════════ LOGIN ══════════════════ */
@@ -288,9 +321,9 @@ export default function AdminPage() {
         ) : (
           <div className="space-y-3">
             {posts.map(p => (
-              <div key={p.slug} className="flex items-center justify-between bg-white border border-border rounded-xl px-5 py-4 hover:border-accent-coral transition-colors group">
-                <div>
-                  <p className="font-display font-semibold text-ink group-hover:text-accent-coral transition-colors">{p.title}</p>
+              <div key={p.slug} className={`flex items-center justify-between bg-white border rounded-xl px-5 py-4 transition-colors group ${confirmDelete === p.slug ? 'border-accent-coral bg-accent-coral/5' : 'border-border hover:border-accent-coral'}`}>
+                <div className="min-w-0 flex-1 mr-4">
+                  <p className="font-display font-semibold text-ink group-hover:text-accent-coral transition-colors truncate">{p.title}</p>
                   <p className="text-xs text-muted mt-0.5">
                     {new Date(p.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                     <span className="mx-2">·</span>
@@ -299,10 +332,37 @@ export default function AdminPage() {
                     </a>
                   </p>
                 </div>
-                <button onClick={() => openEdit(p)}
-                  className="text-xs text-muted hover:text-accent-coral transition-colors font-medium px-3 py-1.5 border border-border rounded-lg hover:border-accent-coral">
-                  Edit
-                </button>
+
+                {/* Actions */}
+                {confirmDelete === p.slug ? (
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <span className="text-xs text-accent-coral font-medium">Delete?</span>
+                    <button
+                      onClick={() => handleDelete(p.slug)}
+                      disabled={deleting}
+                      className="text-xs bg-accent-coral text-paper px-3 py-1.5 rounded-lg font-semibold hover:opacity-80 disabled:opacity-40"
+                    >
+                      {deleting ? '…' : 'Yes'}
+                    </button>
+                    <button
+                      onClick={() => setConfirmDelete(null)}
+                      className="text-xs border border-border text-muted px-3 py-1.5 rounded-lg hover:text-ink"
+                    >
+                      No
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <button onClick={() => openEdit(p)}
+                      className="text-xs text-muted hover:text-accent-coral transition-colors font-medium px-3 py-1.5 border border-border rounded-lg hover:border-accent-coral">
+                      Edit
+                    </button>
+                    <button onClick={() => setConfirmDelete(p.slug)}
+                      className="text-xs text-muted hover:text-red-500 transition-colors font-medium px-3 py-1.5 border border-border rounded-lg hover:border-red-400">
+                      Delete
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -349,7 +409,7 @@ export default function AdminPage() {
             <label className="block text-[10px] tracking-[0.2em] text-muted uppercase mb-2">
               Cover Image <span className="normal-case tracking-normal text-muted ml-1 text-xs">(optional)</span>
             </label>
-            <label className="block border-2 border-dashed border-border rounded-xl p-6 text-center cursor-pointer hover:border-accent-coral transition-colors">
+            <label className="block border-2 border-dashed border-border rounded-xl p-6 text-center cursor-pointer hover:border-accent-coral transition-colors relative">
               <input type="file" accept="image/*" onChange={onImage} className="hidden" />
               {imagePreview ? (
                 <div>
@@ -363,6 +423,16 @@ export default function AdminPage() {
                 </>
               )}
             </label>
+            {imagePreview && (
+              <button
+                type="button"
+                onClick={removeImage}
+                className="mt-2 text-xs text-muted hover:text-red-500 transition-colors flex items-center gap-1"
+              >
+                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                Remove image
+              </button>
+            )}
           </div>
 
           {/* Content */}
