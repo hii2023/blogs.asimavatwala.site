@@ -321,8 +321,8 @@ export default function AdminPage() {
         ) : (
           <div className="space-y-3">
             {posts.map(p => (
-              <div key={p.slug} className={`flex items-center justify-between bg-white border rounded-xl px-5 py-4 transition-colors group ${confirmDelete === p.slug ? 'border-accent-coral bg-accent-coral/5' : 'border-border hover:border-accent-coral'}`}>
-                <div className="min-w-0 flex-1 mr-4">
+              <div key={p.slug} className={`flex flex-wrap items-center justify-between bg-white border rounded-xl px-5 py-4 gap-3 transition-colors group ${confirmDelete === p.slug ? 'border-accent-coral bg-accent-coral/5' : 'border-border hover:border-accent-coral'}`}>
+                <div className="min-w-0 flex-1 min-w-[160px]">
                   <p className="font-display font-semibold text-ink group-hover:text-accent-coral transition-colors truncate">{p.title}</p>
                   <p className="text-xs text-muted mt-0.5">
                     {new Date(p.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
