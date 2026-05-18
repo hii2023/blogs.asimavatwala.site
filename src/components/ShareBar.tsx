@@ -1,14 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Props { title: string; slug: string }
 
 export default function ShareBar({ title, slug }: Props) {
-  const [copied, setCopied] = useState(false);
-  const url   = `https://blogs.asimavatwala.site/blog/${slug}/`;
-  const enc   = encodeURIComponent(url);
-  const encT  = encodeURIComponent(title);
+  const [copied, setCopied]     = useState(false);
+  const [canShare, setCanShare] = useState(false);
+
+  const url  = `https://blogs.asimavatwala.site/blog/${slug}/`;
+  const enc  = encodeURIComponent(url);
+  const encT = encodeURIComponent(title);
+
+  useEffect(() => {
+    setCanShare(typeof navigator !== 'undefined' && !!navigator.share);
+  }, []);
 
   function copyLink() {
     navigator.clipboard.writeText(url);
@@ -16,7 +22,6 @@ export default function ShareBar({ title, slug }: Props) {
     setTimeout(() => setCopied(false), 2500);
   }
 
-  // Native Web Share (works on mobile — shows Instagram, WhatsApp, etc.)
   async function nativeShare() {
     if (navigator.share) {
       try { await navigator.share({ title, url }); } catch { /* cancelled */ }
@@ -73,16 +78,18 @@ export default function ShareBar({ title, slug }: Props) {
           </a>
         ))}
 
-        {/* Instagram — uses native share on mobile, copy on desktop */}
-        <button
-          onClick={nativeShare}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border text-muted hover:border-[#E1306C] hover:text-[#E1306C] transition-all text-sm"
-        >
-          <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-          </svg>
-          <span>Instagram</span>
-        </button>
+        {/* Native share — only shown when Web Share API is available (mobile/supported browsers) */}
+        {canShare && (
+          <button
+            onClick={nativeShare}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border text-muted hover:border-accent-coral hover:text-accent-coral transition-all text-sm"
+          >
+            <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
+            </svg>
+            <span>Share</span>
+          </button>
+        )}
 
         {/* Copy Link */}
         <button

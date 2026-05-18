@@ -3,16 +3,16 @@ import Link from 'next/link';
 export default function Header() {
   return (
     <header className="border-b border-border bg-paper">
-      <div className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
-        <Link href="/" className="group flex flex-col leading-tight">
-          <span className="font-display text-2xl font-bold tracking-tight text-ink group-hover:opacity-75 transition-opacity">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-5 sm:py-6 flex items-center justify-between gap-4">
+        <Link href="/" className="group flex flex-col leading-tight min-w-0">
+          <span className="font-display text-xl sm:text-2xl font-bold tracking-tight text-ink group-hover:opacity-75 transition-opacity truncate">
             Present Enough
           </span>
           <span className="text-[10px] tracking-[0.2em] text-muted uppercase font-body">
             by Altaf Simavatwala
           </span>
         </Link>
-        <nav className="flex items-center gap-8">
+        <nav className="flex items-center gap-5 sm:gap-8 flex-shrink-0">
           <Link
             href="/"
             className="text-sm text-muted hover:text-ink transition-colors tracking-wide"

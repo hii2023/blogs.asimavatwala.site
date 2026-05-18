@@ -25,7 +25,9 @@ export default function LikeButton({ slug }: { slug: string }) {
     await addLike(slug);
   }
 
-  if (!ready) return null;
+  if (!ready) return (
+    <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-border w-28 h-10 animate-pulse bg-border/40" />
+  );
 
   return (
     <button

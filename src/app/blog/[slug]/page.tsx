@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import { getAllPosts, getPostBySlug } from '@/lib/posts';
 import Header from '@/components/Header';
 import ShareBar from '@/components/ShareBar';
@@ -32,9 +33,9 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
       <main className="flex-1">
         {/* Title block */}
-        <div className="max-w-4xl mx-auto px-6 pt-16 pb-8">
-          <div className="flex items-center gap-3 mb-8 text-xs text-muted">
-            <a href="/" className="hover:text-ink transition-colors">← All posts</a>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-8">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-8 text-xs text-muted">
+            <Link href="/" className="hover:text-ink transition-colors">← All posts</Link>
             <span className="text-border">·</span>
             <span>{date}</span>
             {post.readTime && (
@@ -45,13 +46,13 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             )}
           </div>
 
-          <h1 className="font-display text-4xl md:text-6xl font-bold leading-[1.1] text-ink mb-8">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-6xl font-bold leading-[1.1] text-ink mb-8">
             {post.title}
           </h1>
 
           {post.quote && (
-            <blockquote className="border-l-4 border-accent-coral pl-6 py-1 mb-10">
-              <p className="font-display text-xl md:text-2xl italic text-muted leading-relaxed">
+            <blockquote className="border-l-4 border-accent-coral pl-5 sm:pl-6 py-1 mb-10">
+              <p className="font-display text-lg sm:text-xl md:text-2xl italic text-muted leading-relaxed">
                 &ldquo;{post.quote}&rdquo;
               </p>
             </blockquote>
@@ -66,17 +67,18 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
         {/* Cover image */}
         {post.coverImage && (
-          <div className="max-w-5xl mx-auto px-6 mb-12">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 mb-12">
             <img
               src={post.coverImage}
               alt={post.title}
+              loading="lazy"
               className="w-full aspect-[21/9] object-cover rounded-xl shadow-lg"
             />
           </div>
         )}
 
         {/* Body */}
-        <div className="max-w-2xl mx-auto px-6 pb-12">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 pb-12">
           <div
             className="blog-content text-ink"
             dangerouslySetInnerHTML={{ __html: post.content }}
@@ -84,7 +86,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         </div>
 
         {/* ── Like + Share ── */}
-        <div className="max-w-2xl mx-auto px-6 pb-12">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 pb-12">
           <div className="border-t border-border pt-10 space-y-8">
             {/* Like */}
             <div>
@@ -98,7 +100,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         </div>
 
         {/* ── Comments ── */}
-        <div className="max-w-2xl mx-auto px-6 pb-24">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 pb-24">
           <div className="border-t border-border pt-10">
             <Comments slug={post.slug} />
           </div>
@@ -106,13 +108,13 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       </main>
 
       <footer className="border-t border-border">
-        <div className="max-w-6xl mx-auto px-6 py-7 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-7 flex flex-wrap items-center justify-between gap-2">
           <span className="font-display text-sm text-muted">
             &copy; {new Date().getFullYear()} Present Enough · Altaf Simavatwala
           </span>
-          <a href="/" className="text-xs text-muted hover:text-ink transition-colors">
+          <Link href="/" className="text-xs text-muted hover:text-ink transition-colors">
             ← Back to all posts
-          </a>
+          </Link>
         </div>
       </footer>
     </div>

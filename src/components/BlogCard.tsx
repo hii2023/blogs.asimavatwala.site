@@ -15,7 +15,8 @@ function formatDate(iso: string) {
 }
 
 function excerpt(html: string, len: number) {
-  return html.replace(/<[^>]*>/g, '').slice(0, len).trimEnd() + '…';
+  const text = html.replace(/<[^>]*>/g, '');
+  return text.length > len ? text.slice(0, len).trimEnd() + '…' : text;
 }
 
 interface Props { post: Post; index: number; featured?: boolean }
@@ -34,6 +35,7 @@ export default function BlogCard({ post, index, featured = false }: Props) {
               <img
                 src={post.coverImage}
                 alt={post.title}
+                loading="lazy"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             ) : (
@@ -48,7 +50,7 @@ export default function BlogCard({ post, index, featured = false }: Props) {
           </div>
 
           {/* Text side */}
-          <div className={`p-8 md:p-10 flex flex-col justify-center border-l-0 md:border-l-4 ${a.border}`}>
+          <div className={`p-6 md:p-10 flex flex-col justify-center border-t-[3px] md:border-t-0 border-l-0 md:border-l-4 ${a.border}`}>
             <p className={`text-xs tracking-[0.2em] uppercase font-semibold ${a.text} mb-4`}>
               Latest Post
             </p>
@@ -82,6 +84,7 @@ export default function BlogCard({ post, index, featured = false }: Props) {
             <img
               src={post.coverImage}
               alt={post.title}
+              loading="lazy"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
           ) : (

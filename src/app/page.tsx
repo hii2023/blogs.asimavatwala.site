@@ -12,8 +12,8 @@ export default function Home() {
 
       {/* Intro */}
       <section className="border-b border-border">
-        <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
-          <h1 className="font-display text-4xl md:text-6xl font-bold text-ink leading-[1.1] mb-8 max-w-2xl">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-6xl font-bold text-ink leading-[1.1] mb-6 sm:mb-8 max-w-2xl">
             Present Enough
           </h1>
           <div className="max-w-2xl space-y-4 text-muted leading-relaxed">
@@ -38,7 +38,7 @@ export default function Home() {
         </div>
       </section>
 
-      <main className="flex-1 max-w-6xl mx-auto w-full px-6 py-16">
+      <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-12 sm:py-16">
         {posts.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-32 text-center">
             <p className="font-display text-5xl font-bold text-ink mb-3 opacity-20">∅</p>
@@ -48,8 +48,8 @@ export default function Home() {
         ) : (
           <>
             {featured && (
-              <section className="mb-16">
-                <div className="flex items-center gap-4 mb-8">
+              <section className="mb-12 sm:mb-16">
+                <div className="flex items-center gap-4 mb-6 sm:mb-8">
                   <span className="text-[10px] tracking-[0.25em] text-muted uppercase font-semibold">
                     Latest
                   </span>
@@ -61,13 +61,13 @@ export default function Home() {
 
             {rest.length > 0 && (
               <section>
-                <div className="flex items-center gap-4 mb-8">
+                <div className="flex items-center gap-4 mb-6 sm:mb-8">
                   <span className="text-[10px] tracking-[0.25em] text-muted uppercase font-semibold">
                     More Thoughts
                   </span>
                   <div className="flex-1 h-px bg-border" />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
                   {rest.map((post, i) => (
                     <BlogCard key={post.slug} post={post} index={i + 1} />
                   ))}
@@ -79,7 +79,7 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-border">
-        <div className="max-w-6xl mx-auto px-6 py-7 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-7 flex flex-wrap items-center justify-between gap-2">
           <span className="font-display text-sm text-muted">
             &copy; {new Date().getFullYear()} Present Enough · Altaf Simavatwala
           </span>

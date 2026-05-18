@@ -101,14 +101,16 @@ export default function Comments({ slug }: { slug: string }) {
           value={name}
           onChange={e => setName(e.target.value)}
           placeholder="Your name"
-          className="w-full border border-border rounded-lg px-4 py-3 text-sm text-ink bg-paper focus:outline-none focus:border-accent-coral transition-colors"
+          maxLength={100}
+          className="w-full border border-border rounded-lg px-4 py-3 text-sm text-ink bg-paper focus:outline-none focus:ring-2 focus:ring-accent-coral/30 focus:border-accent-coral transition-colors"
         />
         <textarea
           value={message}
           onChange={e => setMessage(e.target.value)}
           placeholder="Share your thoughts…"
           rows={4}
-          className="w-full border border-border rounded-lg px-4 py-3 text-sm text-ink bg-paper focus:outline-none focus:border-accent-coral transition-colors resize-none"
+          maxLength={2000}
+          className="w-full border border-border rounded-lg px-4 py-3 text-sm text-ink bg-paper focus:outline-none focus:ring-2 focus:ring-accent-coral/30 focus:border-accent-coral transition-colors resize-none"
         />
         {error && <p className="text-accent-coral text-sm">{error}</p>}
         <button
